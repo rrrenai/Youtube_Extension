@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "YouEx",
+    "name": "Flip You(tube)",
     "version": "1.0",
   
     "description": "A Youtube extension which allows you to seamlessly mirror, rewind, and loop certain parts of videos.",
