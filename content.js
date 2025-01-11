@@ -1,7 +1,15 @@
 function toggleMenu() {
   const menu = document.querySelector("#mirror-menu");
   if (menu) {
-    menu.style.display = menu.style.display === "block" ? "none" : "block";
+    menu.style.display = menu.style.display === "inline-block" ? "none" : "inline-block";
+
+    if (menu.style.display === "inline-block") {
+      // Reposition the menu relative to the button when it's shown
+      const button = document.querySelector("#mirror-button");
+      const buttonRect = button.getBoundingClientRect();
+      menu.style.top = `${buttonRect.top - menu.offsetHeight - 10}px`; // 10px above the button
+      menu.style.left = `${buttonRect.left}px`;
+    }
   }
 }
 
@@ -23,7 +31,6 @@ function setVideoLoop(startTime, endTime) {
       video.currentTime = startTime;
     }
   }, 100);
-
 }
 
 function createMenu() {
@@ -31,9 +38,7 @@ function createMenu() {
 
   const menu = document.createElement("div");
   menu.id = "mirror-menu";
-  menu.style.position = "absolute";
-  menu.style.top = "50px"; // Adjust as needed
-  menu.style.right = "10px";
+  menu.style.position = "absolute"; // Positioning relative to the document
   menu.style.zIndex = "1000";
   menu.style.backgroundColor = "rgba(42, 42, 42, 0.8)";
   menu.style.color = "white";
@@ -72,7 +77,7 @@ function createMenu() {
   endInput.type = "text";
   endInput.placeholder = "End (seconds)";
   endInput.style.marginBottom = "5px";
-  endInput.style.display = "block";  
+  endInput.style.display = "block";
 
   const loopButton = document.createElement("button");
   loopButton.innerText = "Set loop";
@@ -81,7 +86,7 @@ function createMenu() {
     const startTime = parseFloat(startInput.value);
     const endTime = parseFloat(endInput.value);
 
-    if(isNaN(startTime) || isNaN(endTime)) {
+    if (isNaN(startTime) || isNaN(endTime)) {
       alert("Please enter valid timestamps.");
       return;
     }
@@ -101,7 +106,6 @@ function createMenu() {
     }
   });
 
-
   // Add options to menu
   menu.appendChild(mirrorOption);
   menu.appendChild(resetOption);
@@ -109,6 +113,7 @@ function createMenu() {
   menu.appendChild(endInput);
   menu.appendChild(loopButton);
   menu.appendChild(clearLoopButton);
+
   document.body.appendChild(menu);
 }
 
@@ -119,6 +124,7 @@ function addMirrorButton() {
   const mirrorButton = document.createElement("button");
   mirrorButton.id = "mirror-button";
   mirrorButton.innerText = "Menu";
+  mirrorButton.style.position = "relative";
   mirrorButton.style.cursor = "pointer";
   mirrorButton.style.padding = "8px";
   mirrorButton.style.margin = "10px 0px";
