@@ -38,20 +38,11 @@ function createMenu() {
 
   const menu = document.createElement("div");
   menu.id = "mirror-menu";
-  menu.style.position = "absolute"; // Positioning relative to the document
-  menu.style.zIndex = "1000";
-  menu.style.backgroundColor = "rgba(42, 42, 42, 0.8)";
-  menu.style.color = "white";
-  menu.style.padding = "10px";
-  menu.style.borderRadius = "5px";
-  menu.style.boxShadow = "0 4px 6px rgba(65, 65, 65, 0.2)";
-  menu.style.display = "none"; // Initially hidden
 
   // Menu options
   const mirrorOption = document.createElement("button");
+  mirrorOption.className = "menu-button";
   mirrorOption.innerText = "Mirror Video";
-  mirrorOption.style.marginBottom = "5px";
-  mirrorOption.style.display = "block";
   mirrorOption.addEventListener("click", () => {
     const video = document.querySelector("video");
     if (video) {
@@ -61,6 +52,7 @@ function createMenu() {
   });
 
   const resetOption = document.createElement("button");
+  resetOption.className = "menu-button";
   resetOption.innerText = "Reset Video";
   resetOption.addEventListener("click", () => {
     const video = document.querySelector("video");
@@ -69,19 +61,17 @@ function createMenu() {
 
   const startInput = document.createElement("input");
   startInput.type = "text";
+  startInput.className = "menu-input";
   startInput.placeholder = "Start (seconds)";
-  startInput.style.marginBottom = "5px";
-  startInput.style.display = "block";
 
   const endInput = document.createElement("input");
   endInput.type = "text";
+  endInput.className = "menu-input";
   endInput.placeholder = "End (seconds)";
-  endInput.style.marginBottom = "5px";
-  endInput.style.display = "block";
 
   const loopButton = document.createElement("button");
+  loopButton.className = "menu-button";
   loopButton.innerText = "Set loop";
-  loopButton.style.display = "block";
   loopButton.addEventListener("click", () => {
     const startTime = parseFloat(startInput.value);
     const endTime = parseFloat(endInput.value);
@@ -95,9 +85,8 @@ function createMenu() {
   });
 
   const clearLoopButton = document.createElement("button");
+  clearLoopButton.className = "menu-button";
   clearLoopButton.innerText = "Clear Loop";
-  clearLoopButton.style.marginBottom = "5px";
-  clearLoopButton.style.display = "block";
   clearLoopButton.addEventListener("click", () => {
     if (loopInterval) {
       clearInterval(loopInterval);
@@ -123,11 +112,13 @@ function addMirrorButton() {
 
   const mirrorButton = document.createElement("button");
   mirrorButton.id = "mirror-button";
-  mirrorButton.innerText = "Menu";
-  mirrorButton.style.position = "relative";
-  mirrorButton.style.cursor = "pointer";
-  mirrorButton.style.padding = "8px";
-  mirrorButton.style.margin = "10px 0px";
+  mirrorButton.className = "ytp-button";
+  mirrorButton.title = "Toggle menu";
+
+  // Add SVG icon
+  mirrorButton.innerHTML = `
+    <img src="https://cloud-ivtz9imsn-hack-club-bot.vercel.app/0flip.png" alt="Menu Icon" width="100%" height="100%">
+  `;
 
   mirrorButton.addEventListener("click", () => {
     createMenu(); // Ensure the menu exists
@@ -137,11 +128,71 @@ function addMirrorButton() {
   controlsCenter.appendChild(mirrorButton);
 }
 
+// Inject styles dynamically
+function injectStyles() {
+  if (document.querySelector("#custom-styles")) return; // Avoid duplicates
+
+  const style = document.createElement("style");
+  style.id = "custom-styles";
+  style.textContent = `
+    #mirror-menu {
+      font-family: "Roboto","Arial",sans-serif;
+      font-weight: 500;
+      position: absolute;
+      z-index: 1000;
+      background-color: rgba(42, 42, 42, 0.9);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      display: none; /* Initially hidden */
+    }
+
+    .menu-button {
+      font-family: "Roboto","Arial",sans-serif;
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      padding: 8px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .menu-button:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .menu-input {
+      font-family: "Roboto","Arial",sans-serif";
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+      width: 100%;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .menu-input::placeholder {
+      font-family: "Roboto","Arial",sans-serif";
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 // Observe for changes in the DOM to ensure the button is added
 const observer = new MutationObserver(() => {
   addMirrorButton();
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
+injectStyles();
 
 console.log("YouTube Mirroring Extension script loaded");
